@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>表单</title>
+	<meta charset="utf-8"/>
+	<style type="text/css">
+
+     form{margin: 0;}
+    
+     input{margin: 0;padding: 0;}
+     /* input 的默认边框是2px.写的时候一般会去改边框、所以这里没有必要重置。
+        input 既支持宽高、又能在一行显示。是一个 inline-block 的一个特性；
+        input 一般都用它默认的宽高、不去更改；*/
+     
+     select{margin: 0;}
+     /*下拉选框支持宽。高的话存在一定兼容性问题。*/
+      
+     textarea{margin: 0;padding: 0;resize:none;overflow: auto;
+             outline: none;}
+
+    
+    
+
+
+      /* 
+       textarea 文本域在IE6下显示的时候是可以拖拽的可以改变大小的，这时候加 resize：none；调整尺寸 none、就调整不了大小了；
+       在别的浏览器显示的时候他会有个滚动条、这时候我们加一个 overflow:auto;
+       溢出自动、当内容没有溢出的时候这个滚动条就不会出现、兼容性问题；
+       outline:none;焦点线、无。焦点线属于网页本身自带着、属于用户体验。现在的浏览器
+       只有鼠标滑过时会有个焦点线、选中时则没有；
+       outline:none;属于用户体验、没有需求则不建议清除；
+       */
+
+
+	</style>
+</head>
+<body>
+
+
+
+<form action="http://www.baidu.com/" method="get" target="_blank">
+
+提交按钮：	<input type="submit" value="提交OK" name="" />
+
+<!-- method 提交方式 ；是以 get 的方式提交；target="_blank 在新网页打开；
+ value 用于指定表单元素的默认数据;控制 input 的一个内容的话就是控制它的 value；
+name 是留给后端使用、相当于前段的使用class的一个概念，算是一个交互预留吧。 -->
+<br/><br/>
+
+文本框： <input type="text" name=""/>
+<br/><br/>	
+
+密码框： <input type="password" name=""/>
+        <!--password的意思为：密码。作为命令时，它可以用来设置和更改用户密码;-->
+<br/><br/>	
+
+单选按钮： <input type="radio" name="gender" id="a" /><label for="a">男</label>
+          <input type="radio" name="gender" id="b" /><label for="b">女</label>
+          <!-- 加入 label 的作用是点击文字也可以选择按钮、在input里加 id 因为 id 是唯一的 普通浏览器下也可以这么写、IE6下这么写才兼容； -->
+          <!-- gender 性别； -->
+<br/><br/>	
+
+复选框:  <input type="checkbox" name="" disabled/> 宅
+         <input type="checkbox" name="" disabled/> 腐
+         <input type="checkbox" name=""/> 逛街
+         <input type="checkbox" name=""/> 健身
+         <input type="checkbox" name=""/> 美食
+         <input type="checkbox" name="" checked/> 旅游
+         <input type="checkbox" name=""/> 纸牌
+         <!-- disabled 禁用的意思；
+              checked 默认选中；
+             这两个东西的话针对单选按钮也是有效的； -->
+<br/><br/>	
+
+<hr/>
+
+上传：<input type="file" name=""/>
+     <!-- 听起来很有用、但个个浏览器下显示的不一样、还没发做兼容。网页上的上传一般都是拿 flash 做的、很少拿它来做。 -->
+<br/><br/>	
+
+图片：<input src="E:\练习2/sun.jpg" type="image" name=""/>
+      <!-- 点击图片会把坐标提交上去、也具备一个提交功能、 -->
+<br/><br/>	
+
+按钮:<input type="button" name=""/>
+     <!-- button 一个单纯的按钮； -->
+<br/><br/>
+
+重置: <input type="reset" name=""/>
+     <!-- 填写表单时会用到； -->
+<br/><br/>
+
+隐藏：<input type="hidden" name=""/>
+     <!-- 隐藏：看不到；前段用不到、一般是后端想在页面上储存一个东西时会用； -->
+<br/><br/>
+
+<hr/>
+
+下拉选框：
+<select>
+	<option>1999</option>
+    <option>1998</option>
+    <option>1997</option>
+    <option selected>1996</option>
+    <option>1995</option>
+    <option>1994</option>
+    <option>1993</option>
+ <!-- 如果不想默认开头是 1999 ，那么在想默认开头的年份里加 selected 即可。 -->  
+</select>
+<br/><br/>
+
+文本域：
+<textarea></textarea>
+<!-- 文本域与上面我们写的文本框类似、差别是 文本框是一个单排、而文本域是里面的内容多的话可以折行；-->
+
+
+
+
+</form>
+
+
+</body>
+</html>
