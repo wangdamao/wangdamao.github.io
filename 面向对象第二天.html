@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		
+		<style type="text/css">
+			
+			#box div,#box2 div{
+				width: 200px;
+				height: 100px;
+				border: 1px solid red;
+				display: none;
+			}
+			#box div.show,#box2 div.show{
+				display: block;
+			}
+			#box input.active,#box2 input.active{
+				background: red;
+			}
+		</style>
+		
+	</head>
+	<body>
+		
+		<div id="box">
+			
+			<input type="button" name="" id="" value="按钮1" class="active"/>
+			<input type="button" name="" id="" value="按钮2" />
+			<input type="button" name="" id="" value="按钮3" />
+			<div class="show">内容1111111</div>
+			<div>内容222222</div>
+			<div>内容333333</div>
+			
+		</div>
+		
+		<div id="box2">
+			
+			<input type="button" name="" id="" value="按钮1" class="active"/>
+			<input type="button" name="" id="" value="按钮2" />
+			<input type="button" name="" id="" value="按钮3" />
+			<div class="show">内容1111111</div>
+			<div>内容222222</div>
+			<div>内容333333</div>
+			
+		</div>
+		
+		<input type="button" name="" id="btn1" value="点击后第一个动" />
+		<input type="button" name="" id="btn2" value="点击后第二个动" />
+		<input type="button" name="" id="btn3" value="点击后没动的动、动得没动" />
+		<input type="button" name="" id="btn4" value="" />
+		<script type="text/javascript">
+			/*
+			  函数身上既有原型又有原型链;
+			  
+			  	从原型链找就等同于找构造函数的原型;直到 object 结束;
+			 * 
+			 * 	原型：prototype 可以优化性能;
+			 * 
+			 *  一般写面向对象都是用混合开发;
+			 * 
+			 * */
+			function Tab(id){
+				this.box = document.getElementById(id);
+				this.btns = this.box.getElementsByTagName('input');
+				this.divs = this.box.getElementsByTagName('div');
+				this.timer = null;
+				this.num = 0;
+			}
+			
+			Tab.prototype.click = function (events){
+				var that = this;
+				for(var i =0;i<this.btns.length;i++){
+
+					(function(n){
+						that.btns[i].addEventListener(events,function(){
+							that.num = n;
+							that.say(n)
+						})
+					})(i)
+				}
+			}
+			
+			Tab.prototype.say = function(index){
+				for(var i=0;i<this.btns.length;i++){
+					this.btns[i].className = this.divs[i].className = '';
+				}
+				this.btns[index].className = 'active';
+				this.divs[index].className = 'show';
+			}
+			
+			Tab.prototype.play = function (){
+				var that = this;
+				clearInterval(this.timer)
+				this.timer = setInterval(function(){
+					that.num ++;
+					that.say(that.num%=3)
+				},200)
+			}
+			
+			Tab.prototype.stop = function (){
+				clearInterval(this.timer)
+				this.timer = null;
+			}
+			Tab.prototype.auto = function (){
+				//判断有没有timer,有取反就是falae,再去取反就是true;
+				return !!this.timer;
+			}
+			var t = new Tab('box')
+			var t2 = new Tab('box2')
+			t.click('click')
+			t2.click('click')
+
+			var btn1 = document.getElementById('btn1');
+			var btn2 = document.getElementById('btn2');
+			var btn3 = document.getElementById('btn3');
+			btn1.onclick = function (){
+				t.play();
+			}
+			btn2.onclick = function (){
+				t.stop()
+				t2.play();
+			}
+			btn3.onclick = function (){
+				if(t.auto()){
+					t.stop()
+				}else{
+					t.play()
+				}
+				if(t2.auto()){
+					t2.stop();
+				}else{
+					t2.play()
+				}
+			}
+		</script>
+		
+	</body>
+</html>
