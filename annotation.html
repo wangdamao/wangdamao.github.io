@@ -1,0 +1,402 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<link href="style/weibo.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class="nArea">
+<!--留言-->
+     <div class="takeComment">
+        <textarea name="textarea" class="takeTextField" id="tijiaoText"></textarea>
+        <div class="takeSbmComment">
+            <input type="button" id="btn1" class="inputs" value="" />
+            <span>(可按 Enter 回复)</span>
+        </div>
+    </div>
+<!--已留-->
+    <div class="commentOn">
+        <div class="messList" id="div1" style="height:502px">
+        	<!--<div class="reply">
+                <p class="replyContent">卫士，新款卫士将推出总共14种车身式样。其中， XS旅行款车型售价为32295英镑(约33.6万元)。</p>
+                <p class="operation">
+                    <span class="replyTime">2018-09-08 16:37:60</span>
+                    <span class="handle">
+                    	<a href="javascript:;" class="top">0</a>
+                        <a href="javascript:;" class="down_icon">0</a>
+                        <a href="javascript:;" class="cut">删除</a>
+                    </span>
+                </p>
+            </div>-->
+        </div>
+        <div class="page" id="page">
+        	<!--<a href="javascript:;" class="active">1</a>
+        	<a href="javascript:;">2</a>
+        	<a href="javascript:;">3</a>-->
+        </div>
+    </div>
+</div>
+</body>
+<script src="jquery-3.1.1.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+  /*
+    weibo.php?act=add&content=xxx	添加一条
+    返回：{error:0, id: 新添加内容的ID, time: 添加时间}
+   */
+  	
+  	// es6的类  和 es5的构造函数一样， 下面的方法是这个构造函数的prototype上的方法
+  	class WebOo {
+  		constructor(){  //  构造器
+  			this.btn = $('#btn1');     // 获取元素
+  			this.txt = $('#tijiaoText');// 获取元素
+  			this.box = $('#div1');// 获取元素
+  			this.num = 1;    //当前页数
+  			this.page = $('#page');// 获取元素
+  			
+  		}
+  		
+  		init(){
+  			const _this = this;// 保存这里的this待用
+  			this.btn.on('click',function(){ //给提交按钮加点击事件
+  				//当点击时候拿到用户输入的文本。
+  				_this.addDiv(_this.txt.val());
+  			});
+  			
+  			/*
+		  		ctrl + 回车 
+		  	*/
+  			this.txt.on('keydown',function(ev){ // 给输入框加keydown事件  当ctrl+回车按下的时候执行和点击一样的任务
+  				if(ev.keyCode == 13 && ev.ctrlKey){
+  					_this.addDiv(_this.txt.val());// 获取到输入数据， 发送请求，渲染页面
+  				}
+  			});
+  			
+  			
+  			this.hash = window.location.hash; // 获取hash绑定在这个对象上
+  			if(!this.hash){
+  				window.location.hash = 'page=1';  // 当没有hash的时候hash的page默认设置为1
+  				this.num = 1;// 当没有hash的时候页码默认设置为1
+  			}else{
+  				this.num = (window.location.hash.split('=')[1])*1; //获取到hash中的页数，并转换为数字类型
+  				this.pageload(this.num);// 加载这一页的数据
+    			this.setpage(); // 重新渲染并设置页码
+  			}
+
+  			$(window).on('hashchange',function(){ // 绑定hashchange事件
+  				_this.pageload(_this.num); //  当hash发生改变的时候重新渲染数据
+  				_this.setpage();//  当hash发生改变的时候重新渲染页码
+  			});
+  			
+  			/*
+  				请求一页数据
+  				weibo.php?act=get&page=2		获取一页数据
+				返回：[{id: ID, content: "内容", time: 时间戳, acc: 顶次数, ref: 踩次数}, {...}, ...]
+  				
+  			*/
+  		}
+  		//获取页码
+  		/*
+  			weibo.php?act=get_page_count	获取页数
+				返回：{count:页数} 
+  		*/
+  		setpage(){   // 获取页数，并根据num渲染页码 并改变hash 触发 hashchange事件
+  			const _this = this;// 保存这里的this待用
+  			$.ajax({  //发送ajax请求， 请求总页数
+  				url:'weibo.php',
+  				data:{
+  					act:'get_page_count'//发送ajax请求， 请求总页数
+  				},
+  				success:function(data){// 成功获取数据的回调函数
+  					data = eval('('+data+')'); // 将获取到的数据转换为对象
+  					//this.page.html('');
+  					//console.log(_this.num,data.count)
+  					_this.pageFn({ // 调用小野马
+  						now:_this.num,// 传入当前的页数
+  						all:data.count,// 传入总页数
+  						parent:_this.page[0],// 传入页码的原生dom元素
+  						len:5, // 最大只同时显示5页的按钮
+  						callback:function(num){ // 设置完毕的回调函数
+							_this.num = num; // 设置（保存）当前点击的页码
+//							_this.pageload(_this.num);
+							
+  							window.location.hash = 'page='+num; // 改变hash值 触发hashchange事件 重新渲染页面与页码
+  						}
+  					});
+  				}
+  			});
+  		}
+  		
+  		
+  		pageload(num){//当页面刷新的时候，调用某组数据
+  			const _this = this;// 保存这里的this待用
+  			$.ajax({ //发送ajax请求， 请求num页的所有数据
+  				url:'weibo.php',
+  				data:{
+  					act:'get',//发送ajax请求， 请求num页的所有数据
+  					page:num
+  				},
+  				success:function(data){// 获取成功回调函数
+  					_this.box.html(''); // 清空当前页内容区的内容
+  					const arr = eval('('+data+')'); // 将数据转换为对象（数组）
+					arr.reverse();//降序的数组。
+  					$.each(arr,function(i,e){ // 遍历数组
+  						_this.createView(e);  // 将数组中的元素传入并渲染
+  					});
+  				}
+  			});
+  		}
+  		
+  		//发送请求，保存数据，渲染页面
+  		addDiv(val){
+  			const _this = this;// 保存这里的this待用
+  			$.ajax({//发送ajax请求， 保存新添加的微博内容
+		      url:'weibo.php',
+		      data:{
+		        act:'add',//发送ajax请求， 保存新添加的微博内容
+		        content:val
+		      },
+		      success:function(data){ // 回调函数
+					data = eval('('+data+')'); // 将数据转换为对象
+			        if(!data.error){  //若没有错误
+			        	_this.num = 1; //将页面重置回第一页
+			        	_this.pageload(_this.num); // 渲染第一页
+			        	_this.setpage(); // 设置页码
+			        }
+			    }
+	   		});
+  		}
+  		//显示的模板
+  		createView(json){
+			const _this = this;// 保存这里的this待用
+  			let str = this.addTime(json.time); // 格式化时间
+  			let div = $(`
+	            <div class="reply">
+	                <p class="replyContent">${json.content}</p>
+	                <p class="operation">
+	                    <span class="replyTime">${str}</span>
+	                    <span class="handle">
+	                      <a href="javascript:;" class="top" index="${json.id}">${json.acc}</a>
+	                      <a href="javascript:;" class="down_icon">0</a>
+	                      <a href="javascript:;" class="cut" index="${json.id}">删除</a>
+	                    </span>
+	                </p>
+	            </div>
+	          `); // 字符串模板， 拼接传入数据的各个属性值
+	         
+	        //点击顶
+	         div.find('.top').off().click(function(){
+	         	_this.getTop($(this).attr('index'),$(this));// 添加点击事件， 将这个元素的id值和这个元素传入点赞函数
+	         });
+	        
+	        //点击删除
+	        div.find('.cut').off().click(function(){
+	         	_this.removeData($(this).attr('index'),$(this));// 添加点击事件， 将这个元素的id值和这个元素传入删除函数
+	         });
+	         
+	          
+  			this.box.prepend(div); // 将参数内容插入到内容区的前面
+	        this.txt.val('');  // 清空输入框
+  		}
+  		
+  		/*
+  			weibo.php?act=del&id=num			删除某一条数据
+				返回：{error:0} 
+  		*/
+  		
+  		removeData(id){ //删除某一条数据
+  			const _this = this;// 保存这里的this待用
+  			$.ajax({  // 发送ajax请求 附带id请求删除对应数据
+		      	url:'weibo.php',
+		      	data:{
+		        act:'del',// 发送ajax请求 附带id请求删除对应数据
+		        id:id
+		      	},
+		      	success:function(data){ // 回调函数
+		      		//console.log(id)
+					data = eval('('+data+')'); // 将获取的字符串转为对象
+			        if(!data.error){ //删除接口请求成功
+			        	console.log(_this.box.children().length)
+			        	if(_this.box.children().length == 1){ // 若当前请求删除的元素是最后一个的时候
+			        		_this.num--;   // 页数减一
+			        	}
+			        	_this.pageload(_this.num); // 让页面回到上一页
+			        	_this.setpage();// 让页码回到上一页
+			        }
+				}    
+	   		});
+  		}
+  		
+  		
+  		//请求顶接口
+  		//weibo.php?act=acc&id=num	返回：{error:0}		顶某一条数据
+				
+  		getTop(id,that){
+  			const _this = this;// 保存这里的this待用
+  			let cook = [];//在cookie中存id，为了保证，当天只能点击1次
+  			if(this.getCookie('top')){ // 看看有没有top这个cookies
+  				cook = JSON.parse(this.getCookie('top')); //  若有就转为对象保存在cook中
+  			}
+
+  			let onoff = cook.some(function(a){  // 开关，当有符合条件的id匹配时为真
+  				return a == id
+  			});
+			if(onoff){  // 若已经有对应的id  就阻止再次点击
+				alert('不好意思!不要刷单哟!');
+				return; // 返回， 不发送请求
+			}
+			
+  			$.ajax({ // 发送点赞的ajax请求
+		      url:'weibo.php',
+		      data:{
+		        act:'acc',// 发送点赞的ajax请求
+		        id:id
+		      },
+		      success:function(data){
+					data = eval('('+data+')'); // 转为对象
+			        if(!data.error){// 若无错误
+			        	var num = Number(that.text());// 将传入的dom元素的值取出来
+			        	that.text(++num); // 设置这个元素的值，让数值加一   -> 点赞数+1
+			        	cook.push(id); // 将这个id保存在cook中
+			        	_this.setCookie('top',JSON.stringify(cook),1); // 将cook转为字符串保存在cookie中，防止非法再次点击这个id的赞
+			        	alert('已顶成功，明天再来吧！');
+//			        	_this.pageload(1);
+			        }
+			    }
+	   		});
+  		}
+  		
+  		
+  		
+  		//获取时间
+  		addTime(time){
+  		  var date = new Date(time*1000);//服务器时间是以秒为单位
+          var year = date.getFullYear(); // 获取年
+          var Month = date.getMonth()+1;// 获取月
+          var d = date.getDate();// 获取日
+          var sen = date.getSeconds();// 获取秒
+          var min = date.getMinutes();// 获取分钟
+          var Hou = date.getHours();// 获取小时
+          var str = year+'-'+tDou(Month)+'-'+tDou(d)+' '+tDou(Hou)+':'+tDou(min)+':'+tDou(sen); // 拼接字符串
+          function tDou(n){ // 不足两位数的补0
+            return n<10?'0'+n:''+n;
+          }
+          
+          return str;
+  		}
+  		
+  		pageFn(json){ // 页码控制函数
+  			const _this = this; // 保存这里的this待用
+			const now = json.now; // 当前值
+			const len = json.len; // 显示几个
+			const all = json.all; // 一共多少页
+			const callback = json.callback; // 回调函数
+			const mid = len%2?Math.ceil(len/2):(Math.ceil(len/2)+1);//计算总值 为偶数的时候，如果不加1，那么会乱序（多加一个）
+			const parent = json.parent; // 获取页码dom元素
+			parent.innerHTML = ''; // 清空页码dom内容
+			
+			if(all < now || all < len){ //若总页数小于当前值， 小于显示的页码个数
+//				console.log(now,all,len)
+				for(var i=1;i<=all;i++){  // 以总页数为准  渲染页码
+					var oA = document.createElement('a'); // 创建a元素
+					oA.href = 'javascript:;'; // 设置href
+					oA.innerHTML = i; // 放入i值 页码值
+					if(i == now){  // 若是当前选中的页码
+						oA.className = 'active'; // 加上active的类名
+					}
+					parent.appendChild(oA); // 插入这个a元素
+				}
+			}else{
+				
+				if(now <= mid){ //当前值小于中值
+					for(var i=1;i<=len;i++){ // 渲染页码
+						var oA = document.createElement('a');// 创建a元素
+						oA.href = 'javascript:;';// 设置href
+						oA.innerHTML = i;// 放入i值 页码值
+						if(i == now){// 若是当前选中的页码
+							oA.className = 'active';// 加上active的类名
+						}
+						parent.appendChild(oA);// 插入这个a元素
+					}
+				}else{ // 若当前值大于中值
+					for(var i=1;i<=len;i++){// 渲染页码
+						var oA = document.createElement('a');// 创建a元素
+						oA.href = 'javascript:;';// 设置href
+						if(now > (all - mid + 1)){ // 边界判定，需要显示的页码接近元素最大值
+							oA.innerHTML = (all - len + i); // 按照这种算法渲染页码值
+							if(now == (all - len + i)){// 若是当前选中的页码
+								oA.className = 'active';// 加上active的类名
+							}
+						}else{ // 边界判定，需要显示的页码未达到的元素最大值
+							oA.innerHTML = (now - mid + i);// 按照这种算法渲染页码值
+							if(now == (now - mid + i)){// 若是当前选中的页码
+								oA.className = 'active';// 加上active的类名
+							}
+						}
+						parent.appendChild(oA);// 插入这个a元素
+					}
+				}
+				
+			}
+				
+			
+			//点击;
+			parent.onclick = function(ev){ // 页码的点击事件
+				if(ev.target.tagName == 'A'){ // 点击的是a标签
+					callback((ev.target.innerHTML)*1); // 调用回调函数 传入当前的页码值
+					_this.pageFn({  // 执行页码控制函数
+						now:(ev.target.innerHTML)*1, // 点击的页码值
+						all:all, // 总页数
+						len:len, // 一次显示的页码数
+						parent:parent, // 当前的页码dom元素
+						callback:callback // 回调
+					});
+				}
+			}
+		}
+  		
+  		
+  		setCookie (key,value,time){ // 设置cookie的工具方法
+	        if(time){ // 若传入了时间
+	          var date = new Date(); // 建立时间对象
+//	          date.setDate(date.getDate()+time);
+	          /*
+	          	11:30
+	          	
+	          	(60*60*11)*1000+(30*60*1000)
+	          */
+	          date.setTime(date.getTime()+(60*1000)); // 设置1分钟后过期
+	          
+	          document.cookie = key+'='+value+';expires='+date.toGMTString(); // 设置cookie
+	        }else{
+	          document.cookie = key+'='+value;// 设置cookie 不设置过期时间 为session
+	        }
+      	}
+      
+	    getCookie(name){ // 获取指定cookie
+	        let arr = document.cookie.split('; ');// 用分号空格切分
+	        let valSting = '';  // 用来保存值
+	        arr.forEach((e,i)=>{   // 遍历数组
+	          let key = e.split('=')[0]; // 获取key值
+	          let val = e.split('=')[1]; // 获取value值
+	          if(key == name){ // 若key值和传入name相等
+	            valSting = val;  // 赋值
+	          }
+	        });
+	        return valSting; // 返回name对应的value值
+	    }	
+  	}
+
+  	var web = new WebOo();
+	web.init();
+  	
+  	
+  
+//	$('#btn1').click(function(){
+	    
+//});
+  
+  
+  		
+</script>
+</html>
