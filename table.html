@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{
+				font-family: "微软雅黑";
+				color: #333;
+			}
+			#form{
+				text-align: center;
+				
+			}
+			#txt{width: 486px;margin:5px auto;text-align: left;}
+			#txt span{
+				display: inline-block;
+				font-family: "微软雅黑";
+				font-size: 14px;
+				color: #333;
+			}
+			#txt span:nth-of-type(1){
+				width:156px;
+				height:20px;
+			}
+			#txt span:nth-of-type(2){
+				width:120px;
+				height:20px;
+			}
+		    #box{
+		    	margin: 120px auto;
+		    	width: 600px;
+		    }
+			.c1{
+				background: skyblue;
+			}
+			.c2{
+				background: #fff;
+			}
+			.c3{
+				background: #00BFFF;
+			}
+			.c4{
+				background: #00BFFF;
+				color: #fff;
+			}
+			.c5{
+				background:pink;
+				color: #fff;
+			}
+			table {
+				border: 1px solid #000;
+				border-right:0;
+				border-bottom: none;
+			}
+			table thead th,table tbody td{
+				text-align: center;
+				line-height:25px;
+				border-right:1px solid #000;
+			}
+			table thead th,table tbody td{
+				border-bottom: 1px solid #000;
+			}
+			.sortmode{
+				width: 100px;
+				height: 25px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<div id="top">
+				<div id="txt">
+				    <span>请输入姓名</span>
+				    <span>请选择性别</span>
+				    <span>请输入年龄</span>
+				</div>
+				<div id="form">
+				<form id="form1">
+				    <input type="text" name="username" placeholder="姓名" />
+				    <select name="sex">
+				        <!--<option value="">请选择一个性别</option>-->
+				        <option value="男">男</option>
+				        <option value="女">女</option>
+				    </select>
+				    <input type="text" name="age" placeholder="年龄"/>
+				    <input type="button" name="btn" value="提交">
+				</form>
+				<p>
+				    <form id="form2">
+				    	<span>请选择编号：</span>
+				        <select name="orderName" class="sortmode">
+				            <option value="id" >编号</option>
+				            <option value="age">年龄</option>
+				        </select>
+				        <span>请选择排序方式：</span>
+				        <select name="orderBy" class="sortmode">
+				            <option value="asc">升序</option>
+				            <option value="desc">降序</option>
+				        </select>
+				        <input type="button" name="orderButton" value="排序">
+				      <input type="button" value="批量删除">
+				    </form>
+				</p>
+				</div>
+			</div>
+			<table width="100%" id="tab1" border="0" cellspacing="0" >
+			    <thead>
+				    <tr>
+				        <th>全选 <input type="checkbox" id="checkAll"></th>
+				        <th>编号</th>
+				        <th>姓名</th>
+				        <th>性别</th>
+				        <th>年龄</th>
+				        <th>操作</th>
+				    </tr>
+			    </thead>
+			    <tbody id="tbody">
+			    	<!--<tr>
+			    		<td><input type="checkbox" id="checkAll"></td>
+			    		<td>1</td>
+			    		<td>大红</td>
+			    		<td>女</td>
+			    		<td>23</td>
+			    		<td>
+			    			<input type="button" value="上移"/>
+			    			<input type="button" value="下移" />
+			    			<input type="button" value="删除"/>
+			    		</td>
+			    	</tr>-->
+			    </tbody>
+			</table>
+		</div>
+	</body>
+<script type="text/javascript" src="jquery-3.1.1.js" ></script>
+<script>
+var data = [
+		 {
+					'id' : 1,
+				 'username' : 'LEO',
+				 'age' : 36,
+				 'sex' : '男'
+		 },
+		 {
+				 'id' : 2,
+				 'username' : 'MOMO',
+				 'age' : 16,
+				 'sex' : '男'
+		 },
+		 {
+				 'id' : 3,
+				 'username' : 'DUODUO',
+				 'age' : 29,
+				 'sex' : '男'
+		 },
+		 {
+				 'id' : 4,
+				 'username' : '勇升',
+				 'age' : 46,
+				 'sex' : '男'
+		 },
+		 {
+				 'id' : 5,
+				 'username' : '小美',
+				 'age' : 40,
+				 'sex' : '女'
+		 }
+ ];
+ 	const tab = $('#tab1'),
+	tBody = $('#tbody'),
+	form1 = $('#form1'),
+	username = $('input[name="username"]'),
+	sex = $('select[name="sex"]'),
+	age = $('input[name="age"]'),
+	btn = $('input[name="btn"]'),
+	orderName = $('select[name="orderName"]'),
+	orderBy = $('select[name="orderBy"]'),
+	orderButton = $('input[name="orderButton"]')
+	
+	let num = 5;
+	
+	$.each(data,function(i,e){
+		e.onoff = false;
+	});
+	// console.log(data);
+	
+	render();
+	function render(){
+		tBody.html('');
+		$.each(data,function(i,e){
+			var on = e.onoff?('onOff="true"'):'';
+			var check = e.onoff?'checked':'';
+			tBody.append($(`
+				<tr class="${((i%2)?'c1':'c2')}" data-index="${e.id}" ${on} >
+					<td><input type="checkbox" ${check}></td>
+					<td>${e.id}</td>
+					<td>${e.username}</td>
+					<td>${e.sex}</td>
+					<td>${e.age}</td>
+					<td>
+						<input type="button" value="上移"/>
+						<input type="button" value="下移" />
+						<input type="button" value="删除"/>
+					</td>
+				</tr>
+			`));
+		});
+	}
+	
+	//点击按钮添加数据;
+	btn.click(function(){
+		if(!username.val() || !age.val()){
+			alert('请添加内容!');
+			return;
+		}else{
+			num++;
+			data.push({
+ 				 'id' : num,
+ 				 'username' : username.val(),
+ 				 'age' : age.val(),
+ 				 'sex' : sex.val(),
+				 'onoff':false
+ 		 	});
+			events();
+			if(tBody.find(':checked').length == tBody.find('tr').length){
+				$('#checkAll').prop('checked',true);
+			}else{
+				$('#checkAll').prop('checked',false);
+			}
+			username.val('');
+			age.val('');
+		}
+	});
+	
+	//上移下移；
+	$('input[value="上移"]').on('click.fn',clickPrev);
+	$('input[value="下移"]').on('click.fn',clickNext);
+	
+	
+	function clickNext(){
+		//有没有下个兄弟节点
+		var parent = $(this).closest('tr');
+		var parentNext = parent.next();
+		if(parentNext.length){ //移动
+			sliceArr(parentNext[0].dataset.index,parent[0].dataset.index);
+			events();
+		}
+	}
+	function clickPrev(){
+		//有没有上个兄弟节点
+		var parent = $(this).closest('tr');
+		var parentPrev = parent.prev();
+		if(parentPrev.length){ //移动
+			sliceArr(parent[0].dataset.index,parentPrev[0].dataset.index);
+			// console.log(data);
+			events();
+		}
+	}
+	
+	function sliceArr(pid,prevId){ //上移的时候，pid是当前的，prevId：前面一个
+		$.each(data,function(i,e){
+			if(e.id == pid){
+				data[i-1] = data.splice(i,1,data[i-1])[0];
+				// var temp = data[index];
+				// data[index] = data[index-1];
+				// data[index-1] = temp;
+			}
+		});
+		//console.log(data)
+	}
+	//删除
+	$('input[value="删除"]').click(remove);
+	
+	function remove(){
+		var reId = $(this).closest('tr')[0].dataset.index;
+		for(var i=0;i<data.length;i++){
+			if(data[i].id == reId){
+				data.splice(i,1);
+				i--;
+				break;
+			}
+		}
+		events();
+		if(tBody.find('tr').length){
+			if(tBody.find(':checked').length == tBody.find('tr').length){
+				$('#checkAll').prop('checked',true);
+			}else{
+				$('#checkAll').prop('checked',false);
+			}
+		}else{
+			$('#checkAll').prop('checked',false);
+		}
+	}
+	
+	hover();
+	
+	//升序
+	orderButton.click(function(){
+		//升序
+		if(orderBy.val() == 'asc'){
+			data.sort(function(a,b){
+				return a[orderName.val()] - b[orderName.val()];
+			});
+		}else{
+			data.sort(function(a,b){
+				return b[orderName.val()] - a[orderName.val()];
+			});
+		}
+		events();
+	});
+	
+	//全选
+	tBody.find(':checkbox').click(checkFn);
+	
+	function checkFn(){
+		var _this = $(this);
+		if($(this).prop('checked')){
+			$(this).closest('tr').attr('class','c5');
+			$(this).closest('tr').attr('onOff',true);
+			
+			$.each(data,function(i,e){
+				if(e.id == _this.closest('tr')[0].dataset.index){
+					data[i].onoff = true;
+				}
+			});
+		}else{
+			$(this).closest('tr').removeAttr('onOff');
+			$.each(data,function(i,e){
+				if(e.id == _this.closest('tr')[0].dataset.index){
+					data[i].onoff = false;
+				}
+			})
+			//data[$(this).closest('tr')[0].dataset.index].onoff = false;
+			setColor();
+		}
+		// console.log()
+		if(tBody.find(':checked').length == tBody.find('tr').length){
+			$('#checkAll').prop('checked',true);
+		}else{
+			$('#checkAll').prop('checked',false);
+		}
+	}
+	$('#checkAll').click(function(){
+		tBody.find(':checkbox').prop('checked',$('#checkAll').prop('checked'));
+		checkAll();
+	});
+	
+	function checkAll(){
+		if($('#checkAll').prop('checked')){
+			tBody.find('tr').attr('class','c5');
+			$.each(data,function(i,e){
+				e.onoff = true;
+			})
+		}else{
+			$.each(data,function(i,e){
+				e.onoff = false;
+			});
+		}
+		events();
+	}
+	
+	
+	
+	
+	function hover(){
+		tBody.find('tr').hover(function(){
+			if(!$(this).attr('onOff')){
+				$(this).attr('class','c3');
+			}
+		},function(){
+			setColor();
+		});
+	}
+	
+	function setColor(){
+		tBody.find('tr:odd').attr('class','c1');
+		tBody.find('tr:even').attr('class','c2');
+		tBody.find('tr').each(function(i,e){
+			// console.log($(e).attr('onOff'))
+			if($(e).attr('onOff')){
+				$(e).attr('class','c5');
+			}
+		});
+		
+	}
+	
+
+	function events(){
+		render();
+		$('input[value="上移"]').click(clickPrev);
+		$('input[value="下移"]').click(clickNext);
+		$('input[value="删除"]').click(remove);
+		tBody.find(':checkbox').click(checkFn);
+		hover();
+		setColor();
+	}
+	
+	//end
+	$('input[value="批量删除"]').click(function(){
+		for(var i=0;i<data.length;i++){
+			if(data[i].onoff){
+				data.splice(i,1);
+				i--;
+			}
+		}
+		events();
+		if(!tBody.find('tr').length){
+			$('#checkAll').prop('checked',false);
+		}
+		// console.log(data);
+	});
+	
+ 	
+</script>
+</html>
