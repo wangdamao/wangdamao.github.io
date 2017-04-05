@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		
+		<ul>
+			<li>1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+			<li>6</li>
+		</ul>
+		
+		<script type="text/javascript">
+			
+			function fn1 (){
+				
+				var b = 1;
+				
+				function fn2 (){
+					b++;//b 可以往外面找、找到b 是1 然后加加、console.log(中的b 就是2);
+						//而 fn2 执行了两次、所以打印出来的就是 2 和 3;		
+					console.log(b);
+				}
+				return fn2;
+			}
+			
+			var f = fn1(); // fn1 执行把函数执行了一遍，然后返回了fn2 ,fn2 等于 fn1执行，等于 return 后面的东西！
+			f();// f 就等于 fn2了、 所以 f 执行、相当于 fn2 执行、f 执行两次、相当于 fn2 执行两次！
+			f();
+		//这里 fn1 就执行了两次 、 var b=1;这个值一直都在、没有被重置！如果 fn1 执行了两次、数据就会被重置、发散！ 
+		
+		
+			
+			(function (){
+				var a = 1;
+				a++;
+				console.log(a);
+			})();
+		//闭包 匿名函数的写法！函数自己的执行！
+		
+		var lis = document.getElementsByTagName('li');
+		
+			for(var i=0;i<lis.length;i++){
+				
+//				lis[i].index = i;
+//				lis[i].onclick = function (){
+//					
+//					console.log(this.index);
+//					
+					//点击事件里面的 i 与 for 循环里面的i 已经不是 一个值、点击事件里面的 i 是lis 的最大值。所以我们要 用到索引值  在点击事件外面把 i 存一下！在点击事件里用的时候、用 this.index!
+//				}
+				
+				
+				
+				
+				(function (n){
+					lis[n].onclick = function (){
+						console.log(n);
+					}
+				})(i);//这里的 i 是个 实参！ n 是 形参！
+				// 函数自执行！写法是 固定的！
+			}
+		
+		
+		
+		</script>
+		
+		
+	</body>
+</html>
