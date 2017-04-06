@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        #box {
+            margin: 100px auto 0;
+            width: 520px;
+            height: 280px;
+            border: 1px solid #000000;
+            position: relative;
+            overflow: hidden;
+        }
+        #list {
+            list-style: none;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        li {
+            float: left;
+        }
+        img {
+            display: block;
+        }
+
+        #prev, #next {
+            position: absolute;
+            width: 30px;
+            height: 60px;
+            background: #000000;
+            color: white;
+            font-weight: bold;
+            font-size: 30px;
+            line-height: 60px;
+            text-align: center;
+            top: 110px;
+            cursor: pointer;
+        }
+        #prev {
+            left: 0;
+        }
+        #next {
+            right: 0;
+        }
+        #text {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding:10px;
+            height: 50px;
+            background: rgba(0,0,0,.8);
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="box">
+        <ul id="list">
+            <li><img src="images1/1.jpg" ></li>
+            <li><img src="images1/2.jpg" ></li>
+            <li><img src="images1/3.jpg" ></li>
+            <li><img src="images1/4.jpg" ></li>
+            <li><img src="images1/5.jpg" ></li>
+        </ul>
+        <span id="prev"> < </span>
+        <span id="next"> > </span>
+        <div id="text">
+            <h3>标题一</h3>
+            <p>内容一</p>
+        </div>
+    </div>
+    
+    <script src="move4.js" type="text/javascript" charset="utf-8"></script>
+    
+    <script>
+        
+        var box = document.getElementById('box');
+        var ul = document.getElementById('list');
+        var lis = ul.getElementsByTagName('li');
+        var imgs = ul.getElementsByTagName('img');
+        var prev = document.getElementById('prev');
+        var next = document.getElementById('next');
+        var divt = document.getElementById('text');
+        var h3 = divt.getElementsByTagName('h3')[0];
+        var p = divt.getElementsByTagName('p')[0];
+        var n = 0;
+        
+       	var arr = [
+       			{title:'标题1',contin:'内容1'},
+       			{title:'标题2',contin:'内容2'},
+       			{title:'标题3',contin:'内容3'},
+       			{title:'标题4',contin:'内容4'},
+       			{title:'标题5',contin:'内容5'},
+       			];
+        
+        /*
+         文字 下去 图片走、文字上来、一个轮回结束
+         * 
+         * **/
+        var onOff = true;
+        var tim = null;
+        ul.style.width = 520*arr.length + 'px';
+
+	     	prev.onclick = function (){
+	        	if(onOff){
+	        		onOff = false;
+	        		n++;
+		        	if(n>arr.length-1){
+		        		n=0;
+		        	}
+		        	
+		        	move(divt,{bottom:-70},800,'linear',function(){
+		        		h3.innerHTML = arr[n].title;
+		        		p.innerHTML = arr[n].contin;
+		        		move(ul,{left:-520*n},500,'linear',function(){
+		        			move(divt,{bottom:0},500,'linear',function(){
+		        				onOff = true;
+		        			})
+		        		})
+		        	})
+	        	}
+	        }
+     	
+     	
+
+        
+        next.onclick = function (){
+        	if(onOff){
+        		onOff = false;
+        		n--;
+	        	if(n<0){
+	        		n=arr.length-1;
+	        	}
+	        	
+	        	move(divt,{bottom:-70},800,'linear',function(){//黑色的阴影部分先消失；
+	        		h3.innerHTML = arr[n].title;//改变黑色阴影部分的 标题；
+	        		p.innerHTML = arr[n].contin;//改变黑色阴影部分的 内容；
+	        		move(ul,{left:-520*n},500,'linear',function(){//紧接着切换图片；
+	        			move(divt,{bottom:0},500,'linear',function(){//然后 黑色阴影部分在上来，这时候文字也已经改变了！
+	        				onOff = true;//目的是只能在运动结束后才可以进行下一张的点击！
+	        			})
+	        		})
+	        	})
+        	}
+        }
+     	tim = setInterval (prev.onclick,500);
+     	
+     	box.onmouseover = function (){
+     		clearInterval(tim);
+     	}
+     	box.onmouseout = function (){
+     		tim = setInterval (prev.onclick,2000);
+     	}
+        
+    </script>
+</body>
+</html>
