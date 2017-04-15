@@ -1,0 +1,411 @@
+html,body{
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	position: relative;
+	/*position:relative是为了解决在移动端overflow:hidden;不起作用*/
+}
+/*-------svg图的黑白滤镜----------*/
+.gray{ 
+	-webkit-filter: grayscale(100%); 
+	-moz-filter: grayscale(100%); 
+	-ms-filter: grayscale(100%); 
+	-o-filter: grayscale(100%); 
+	filter: grayscale(100%); 
+	filter: gray; 
+} 
+#content{
+	width: 100vw;
+	height: 100vh;
+	position: absolute;
+	top: 0;
+	left: 0;
+	transition: 1s;
+}
+svg{
+	background: transparent;
+	width: 100vw;
+	height: 100vh;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+defs{
+	transition: 2s ease-in-out;
+}
+path{
+	transition: 2s ease-in-out;
+}
+rect{
+	transition: 2s ease-in-out;
+}
+.canvas{
+	width: 100vw;
+	height: 100vh;
+	position: absolute;
+	z-index: -1;
+	transition: 2s ease-in-out;
+}
+#personage .canvas{
+	background-color: rgb(194, 192, 202);
+}
+
+/*------------nav-------------*/
+#nav{
+	width: 100%;
+	height: 15%;
+	background-color: #f6f6f6;
+	position: absolute;
+	top: -15%;
+	left: 0;
+	border-bottom: 1px solid #A3A3B2;
+	z-index: 999;
+	overflow: hidden;
+	transition: 1s;
+}
+#nav ul{
+	width: 100%;
+	height: 100%;
+	font: 2vw "arial, helvetica, sans-serif";
+	font-weight: 100;
+}
+#nav li{
+	float: right;
+	padding: 0 4vw;
+	line-height: 100px;
+}
+/*----------loading----------*/
+#loading{
+	width: 100vw;
+	height: 100vh;
+	position: absolute;
+	background-color: #fff;
+	z-index: 999;
+	transition: 1s;
+	overflow: hidden;
+}
+#loading .blue-star{
+	width: 10vw;
+	height: 10vw;
+	background: transparent url(../img/star.svg) no-repeat;
+	background-size: contain;
+	position: absolute;
+	top: 35vh;
+	left: 45vw;
+	transform-origin: center;
+	transition: 200s linear;
+	z-index: 10;
+}
+#loading .prog{
+	width: 100vw;
+	height: 6vw;
+	position: absolute;
+	top: 60vh;
+	left: -100vw;
+	border: none;
+	background: url(../img/flag.png) repeat-x;
+	background-size: contain;
+	z-index: 10;
+}
+/*----------welcome----------*/
+#welcome{
+	/*opacity: 0;*/
+	width: 100vw;
+	height: 100vh;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: #fff;
+	transition: 1s;
+	overflow: hidden;
+}
+#welcome .mask{
+	width: 100vw;
+	height: 100vh;
+	background-color: #fff;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 10;
+	opacity: 0;
+	transition: 1s;
+}
+#welcome .slogan div{
+	box-sizing: border-box;
+	height: 6vw;
+	font-size: 0vw;
+	padding: 0 2vw;
+	color: rgba(255,255,255,0);
+	border: 1px solid #000;
+	position: absolute;
+	top: 60vh;
+}
+#welcome .slogan div:nth-child(1){
+	width: 16vw;
+	background:#fff url(../img/men-2.png) center no-repeat;
+	background-size: contain;
+	left: 42vw;
+	z-index: 1;
+}
+#welcome .slogan div:nth-child(2){
+	width: 30vw;
+	background: #fff url(../img/logo-2.png) center no-repeat;
+	background-size: contain;
+	left: 35vw;
+	z-index: 10;
+	display: none;
+}
+#welcome .slogan div:nth-child(3){
+	width: 100vw;
+	border: none;
+	background: url(../img/flag.png) repeat-x;
+	background-size: contain;
+	left: -100vw;
+	z-index: 100;
+	transition: 5s;
+}
+.btn{
+	width: 12vw;
+	height: 6vw;
+	box-sizing: border-box;
+	border: 1px solid #000;
+	text-align: center;
+	position: absolute;
+	z-index: 100;
+	overflow: hidden;
+	cursor: pointer;
+	transition: 2s;
+}
+#welcome .btn{
+	top: 74vh;
+	left: 44vw;
+	opacity: 0;
+	transform: scale(0.5);
+}
+.btn span{
+	display: block;
+	position: absolute;
+	width: 16vw;
+	height: 6vw;
+	background-color: rgba(0,0,0,0.6);
+	transition: 1s;
+	z-index: -1;
+}
+.btn a{
+	font: 1vw/6vw "arial, helvetica, sans-serif";
+	color: #000;
+	transition: 1s;
+}
+.btn .left{
+	transform: skewX(115deg);
+	top: 6vw;
+	left: -22vw;
+}
+.btn .right{
+	transform: skewX(115deg);
+	top: -6vw;
+	left: 18vw;
+}
+.btn:hover{
+	border-color: #fff;
+	color: #fff;
+	transform: scale(0.9);
+}
+.btn:hover a{
+	color: #fff;
+}
+.btn:hover .left{
+	top: 0;
+	left: -8vw;
+}
+.btn:hover .right{
+	top: 0;
+	left: 4vw;
+}
+
+/*----------personage----------*/
+#personage{
+	/*opacity: 0;*/
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+}
+#personage .nav{
+	width: 40px;
+	height: 40px;
+	position: absolute;
+	top: 40px;
+	right: 10px;
+	cursor: pointer;
+	z-index: 10;
+	transition: 1s;
+}
+#personage .nav span{
+	display: block;
+	position: absolute;
+	width: 40px;
+	height: 4px;
+	background-color: rgba(0,0,0,0.4);
+	transition: 1s;
+}
+#personage .nav span:nth-child(1){
+	top: 0;
+	transform-origin: center;
+}
+#personage .nav span:nth-child(2){
+	top: 14px;
+	transform-origin: center;
+}
+#personage .nav span:nth-child(3){
+	top: 28px;
+	transform-origin: center;
+}
+#personage .info{
+	width: 100vw;
+	position: absolute;
+	top: 100px;
+	color: #000;
+	opacity: 0.4;
+	z-index: 10px;
+	transition: 1s;
+}
+#personage .info .left{
+	float: left;
+	padding-left: 10px;
+}
+#personage .info .right{
+	float: right;
+	padding-right: 10px;
+}
+#personage .info h3{
+	font: 2vw/10vw "arial, helvetica, sans-serif";
+	position: relative;
+	z-index: 50;
+	transition: 1s;
+}
+#personage .info h3 strong{
+	font-size: 4vw;
+}
+#personage .info .left p{
+	width: 24vw;
+	font: 1.5vw/5vw "arial, helvetica, sans-serif";
+}
+#personage .info .right h3 strong{
+	font-weight: normal;
+}
+#personage .info .btn{
+	right: 10px;
+}
+#personage .info .btn span{
+	background-color: rgba(0,0,0,0.3);
+}
+#personage .info .btn:nth-of-type(1){
+	top: 10vw;
+}
+#personage .info .btn:nth-of-type(2){
+	top: 20vw;
+}
+#personage .bar{
+	width: 100vw;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	z-index: 1;
+}
+#personage .bar-btn{
+	height: 5vw;
+}
+#personage .bar-btn div{
+	width: 2vw;
+	height: 2vw;
+	opacity: 0.3;
+	transition: 1s;
+	cursor: pointer;
+}
+#personage .bar-btn .prev{
+	float: left;
+	margin-left: 20px;
+	background: url(../img/left.png) center no-repeat;
+	background-size: contain;
+}
+#personage .bar-btn .next{
+	float: right;
+	margin-right: 20px;
+	background: url(../img/right.png) center no-repeat;
+	background-size: contain;
+}
+#personage .bar-btn div:hover{
+	opacity: 0.5;
+	transform: scale(1.2);
+}
+#personage .bar-imgs{
+	width: 3600px;
+	height: 110px;
+	position: relative;
+	left: 0;
+	bottom: 0;
+}
+#personage .bar-imgs div{
+	width: 80px;
+	height: 110px;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	cursor: pointer;
+	position: absolute;
+	transition: 1s;
+}
+/*-----------------左部------------------*/
+.resume{
+	width: 70%;
+	height: 60%;
+	position: absolute;
+	top: 0;
+	left: -70%;
+	background-color: #f6f6f6;
+	z-index: 10;
+	overflow: hidden;
+	transition: 1s ease-out;
+}
+
+.resume ul{
+	width: 100%;
+	height: 100%;
+	padding: 15% 0 0 5%;
+	font-size: 1vw;
+	line-height: 2vw;
+}
+.resume li{
+	width: 40%;
+	float: left;
+	margin-right: 10px;
+	border-bottom: 1px solid #E0E0E0;
+}
+/*-----------------底部------------------*/
+.official{
+	width: 100%;
+	height: 40%;
+	position: absolute;
+	bottom: -40%;
+	left: 0;
+	background-color: #f6f6f6;
+	z-index: 10;
+	transition: 1s ease-out;
+}
+.official .btn{
+	right: 10px;
+	bottom: 40px;
+}
+/*-----------------stars------------------*/
+.stars{
+	width: 4vw;
+	height: 100vh;
+	float: left;
+	opacity: 0.05;
+	top: 0;
+}
+.stars div{
+	height: 10vh;
+	background: url(../img/star-bg.svg) no-repeat;
+	background-size: 30px 30px;
+}
