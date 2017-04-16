@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+		<link rel="stylesheet" type="text/css" href="css/music.css"/>
+	</head>
+	<body style="background-color: rgb(64, 64, 32);">
+		<audio src="song/G.E.M. 邓紫棋 (Gem Tang) - 喜欢你.mp3" id="audio" ></audio>
+		<div class="music">
+			<div class="m-header">
+				<div class="searchWarp">
+					<input type="text" id="q-search" value="" class="txt fl" placeholder="请输入歌曲/歌手名称"/>
+					<a href="javascript:;" id="search-btn" class="fl"><i></i></a>
+				</div>
+			</div>
+			<div class="m-midd">
+				<div class="m-con clear">
+					<div class="m-left fl">
+						<h2>播放列表</h2>
+						<p class="clear">
+							<span class="song">歌曲</span>
+							<span class="singer">歌手</span>
+							<span class="s-time">时长</span>
+						</p>
+						<div class="scroll" id="scroll">
+							<ul class="musicList">
+								<li class="clear">
+									<span class="song">喜欢你</span>
+									<span class="singer">邓紫棋</span>
+									<span>03:59</span>
+								</li>
+								<li class="clear">
+									<span class="song">平凡之路</span>
+									<span class="singer">朴树</span>
+									<span>05:01</span>
+								</li>
+								<li class="clear">
+									<span class="song">逆流成河</span>
+									<span class="singer">紫菱</span>
+									<span>04:02</span>
+								</li>
+							</ul>
+							<div class="scrT">
+								<div class="scrTiao" id="scrTiao"></div>
+							</div>
+						</div>
+					</div>
+					<div class="m-cen fl">
+						<h2>搜索列表</h2>
+						<p>
+							<span class="song">歌曲</span>
+							<span class="singer">歌手</span>
+							<span class="s-time">时长</span>
+						</p>
+						<div class="scroll">
+							<ol id="searchList" style="height: 310px;">
+								
+							</ol>
+							<div class="page clear fr">
+								<!--<a href="" class="active">1</a>
+								<a href="">2</a>
+								<a href="">3</a>-->
+							</div>
+						</div>
+					</div>
+					<div class="m-right fl">
+						<div class="m-r-top">
+							<img src="images/player_cover.png" alt="" width="180" height="180"/>
+						</div>
+						<div class="m-r-cen">
+							<p>歌曲名：<span></span></p>
+							<p>歌手名：<span></span></p>
+							<p>专辑名：<span></span></p>
+						</div>
+						<div class="m-r-bot">
+							<p id="song_lrc"></p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="m-footer">
+				<div class="m-f-con clear">
+					<div class="m-f-left fl">
+						<a href="javascript:;" id="prve_song"></a>
+						<a href="javascript:;" id="play_song"></a>
+						<a href="javascript:;" id="next_song"></a>
+					</div>
+					<div class="m-f-jdt fl">
+						<p>正在播放：<span></span> - <span></span></p>
+						<div class="jdt">
+							<div class="one"></div>
+							<div class="two" id="gqbt"></div>
+							<div class="qiu" id="song_drag"></div>
+						</div>
+					</div>
+					<div class="m-f-song-time fl">
+						<p><span id="timing">00:00</span> / <span id="timed"></span></p>
+					</div>
+					<div class="m-f-song-yl fl clear">
+						<a href="javascript:;" class="yl"></a>
+						<div class="yltiao fl">
+							<div class="one"></div>
+							<div class="qiu ylScroll"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="js/jquery-3.1.1.js"></script>
+		<script src="js/music.js"></script>
+		<script src="http://c.y.qq.com/base/fcgi-bin/fcg_musicexpress.fcg?json=3&guid=0"></script>
+	</body>
+</html>

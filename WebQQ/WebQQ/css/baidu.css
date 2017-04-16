@@ -1,0 +1,63 @@
+.search {
+	width: 640px;
+	height: 40px;
+}
+
+.search #bd-search {
+	width: 530px;
+	height: 40px;
+	background: #fff;
+	float: left;
+	padding-left: 10px;
+	font-size: 16px;
+}
+
+.search #bd-searchBtn {
+	width: 100px;
+	height: 40px;
+	text-align: center;
+	line-height: 40px;
+	background: #ccc;
+	float: left;
+	font-size: 16px;
+	color: #333;
+}
+
+.warp {
+	width: 640px;
+	position: absolute;
+	left: 440px;
+	top: 140px;
+}
+
+.warp img {
+	margin-left: 180px;
+}
+
+.searchList {
+	width: 538px;
+	position: absolute;
+	left: 440px;
+	top: 309px;
+	border: 1px solid #ccc;
+	height: 224px;
+	overflow: hidden;
+	background: #fff;
+}
+
+.searchList li {
+	height: 32px;
+	background: #fff;
+	color: #333;
+	line-height: 32px;
+	padding-left: 10px;
+}
+
+.searchList li:hover {
+	background: #ccc;
+	cursor: pointer;
+}
+
+.active {
+	background: #ccc;
+}

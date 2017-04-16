@@ -1,0 +1,156 @@
+body,
+html {
+	width: 100%;
+	height: 100%;
+}
+
+.wrap {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	perspective: 800px;
+	position: relative;
+}
+
+.photo {
+	width: 260px;
+	height: 320px;
+	position: absolute;
+}
+
+.photo .side {
+	width: 100%;
+	height: 100%;
+	background: #eee;
+	padding: 20px;
+	box-sizing: border-box;
+	text-align: center;
+	font-size: 18px;
+}
+
+.photo .side-front .image {
+	width: 100%;
+	height: 250px;
+	line-height: 250px;
+	overflow: hidden;
+}
+
+.photo .side-front .image img {
+	width: 100%;
+}
+
+.photo .side-front {
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: 1;
+	transform: rotateY(0deg);
+}
+
+.photo .side-back {
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: 0;
+	transform: rotateY(180deg);
+}
+
+.photo .side-back .dec {
+	color: #666;
+	line-height: 1.5em;
+}
+
+.photo-center {
+	left: 50%;
+	top: 50%;
+	margin: -160px 0 0 -130px;
+	z-index: 9999;
+}
+
+.photo-wrap {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	transform-style: preserve-3d;
+	transition: all 1s;
+}
+
+.photo-wrap .side {
+	backface-visibility: hidden;
+}
+
+#photo-front .photo-wrap {
+	transform: rotateY(0deg);
+}
+
+#photo-back .photo-wrap {
+	transform: rotateY(180deg);
+}
+
+.nav {
+	width: 50%;
+	height: 30px;
+	background: #fff;
+	position: absolute;
+	bottom: 20px;
+	z-index: 999;
+	left: 25%;
+}
+
+.nav span {
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+	background: #ccc;
+	margin-left: 2px;
+	border-radius: 50%;
+	cursor: pointer;
+	transform: scale(.48);
+	text-align: center;
+	transition: all 1s;
+}
+
+@font-face {
+	font-family: "icons";
+	src: url("../fonts/icons.woff") format("woff");
+	font-weight: normal;
+	font-size: normal;
+}
+
+.nav span:after {
+	content: "\e600";
+	font-family: "icons";
+	font-size: 80%;
+	display: inline-block;
+	line-height: 30px;
+	color: #fff;
+	opacity: 0;
+}
+
+.nav .active {
+	transform: scale(1)
+}
+
+.nav .active:after {
+	opacity: 1;
+}
+
+.nav #back {
+	transform: rotateY(-180deg);
+}
+
+.nav #front {
+	transform: rotateY(0deg);
+}
+
+.photo-wrap {
+	transform-origin: 0% 50%;
+}
+
+#photo-front .photo-wrap {
+	transform: translate(0px, 0px) rotateY(0deg);
+}
+
+#photo-back .photo-wrap {
+	transform: translate(260px, 0px) rotateY(180deg)
+}

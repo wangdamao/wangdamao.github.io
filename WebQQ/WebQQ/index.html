@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+		<link rel="stylesheet" type="text/css" href="css/index.css"/>
+	</head>
+	<body style="overflow-x: hidden;overflow-y: hidden;background: url(images/bg.jpg);background-size: cover;">
+		<!--桌面列表-->
+		<ul class="fileList">
+			<li>
+				<img src="images/pc.png" alt="" />
+				<p>回收站</p>
+			</li>
+			<li id="music">
+				<img src="images/music2.png" alt="" />
+				<p>QQ音乐</p>
+			</li>
+			<li id="baidu">
+				<img src="images/bd.png" alt="" width="61" height="65"/>
+				<p>百度一下</p>
+			</li>
+			<li id="dateTime">
+				<img src="images/timg.jpg" alt="" width="63" height="65"/>
+				<p>日历</p>
+			</li>
+			<!--<li id="">
+				<img src="images/musicBg.jpg" alt="" width="63" height="65"/>
+				<p>图片画廊</p>
+			</li>-->
+		</ul>
+		<!--百度-->
+		<div id="baiduIframe" style="position: absolute;">
+			<a href="javascript:;" id="closeBaidu">返回</a>
+			<iframe src="baidu.html" frameborder="0" scrolling="no" width="100%" height="100%"></iframe>
+		</div>
+		<!--QQ音乐-->
+		<div id="musicIframe" style="position: absolute;">
+			<a href="javascript:;" id="closeMusic">返回</a>
+			<iframe src="music.html" frameborder="0" scrolling="no" width="100%" height="100%"></iframe>
+		</div>
+		<!--图片画廊-->
+		<!--<div id="galleryIframe" style="position: absolute;">
+			<a href="javascript:;" id="closeGallery">返回</a>
+			<iframe src="gallery.html" frameborder="0" scrolling="no" width="100%" height="100%"></iframe>
+		</div>-->-->
+		<!--日历-->
+		<div class="date">
+			<p class="timeO clear">
+				<span></span>
+				<a href="javascript:;" id="closeTime">X</a>
+			</p>
+			<p class="timeT"></p>
+			<div class="dateCon">
+				<div class="d_header">
+					<span></span>
+					<a href="javascript:;" id="dateNext"></a>
+					<a href="javascript:;" id="datePrev"></a>
+				</div>
+				<ol class="clear">
+					<li>一</li>
+					<li>二</li>
+					<li>三</li>
+					<li>四</li>
+					<li>五</li>
+					<li>六</li>
+					<li>日</li>
+				</ol>
+				<ul class="clear dateList">
+					
+				</ul>
+			</div>
+			<p style="margin-top: 20px;"><a href="javascript:;" class="sz">日期和时间设置</a></p>
+		</div>
+		<script src="js/jquery-3.1.1.js"></script>
+		<script src="js/index.js"></script>
+	</body>
+</html>
